@@ -20,21 +20,21 @@ END_OBJECT;
 
 STREAMABLE(ss);
 
-String *_(concat)(String *other)            ALIAS (concat);
-String *_(append)(char c)                   ALIAS (append);
-String *_(prepend)(char c)                  ALIAS (prepend);
-String *_(inject)(int index, char c)        ALIAS (inject);
-String *_(substring)(int start, int length) ALIAS (substring);
-String *_(trim)()                           ALIAS (trim);
-int     _(equals)(String *other)            ALIAS (equals);
-int     _(contains)(String *other)          ALIAS (contains);
+String *_(concat)(String *other);
+String *_(append)(char c);
+String *_(prepend)(char c);
+String *_(inject)(int index, char c);
+String *_(substring)(int start, int length);
+String *_(trim)();
+int     _(equals)(String *other);
+int     _(contains)(String *other);
 
 #undef TYPENAME
 
 // Stream extension
 #define TYPENAME Stream
 
-String *_(getline)() ALIAS (sgetline);
+String *_(getline)();
 
 #undef TYPENAME
 #endif

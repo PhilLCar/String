@@ -142,7 +142,7 @@ int _(contains)(String *other)
   char *acon  = _this->base;
   int   alen  = _this->length;
   char *bcon  = other->base;
-  int   blen  = strlen(other); // Allow to call this method with a char *
+  int   blen  = strlen(bcon); // Allow to call this method with a char *
   int   match = 0;
   int   pos   = -1;
 
@@ -212,6 +212,8 @@ void ssungetc(int c, StringStream *ss)
     ss->base->base[--ss->pos] = c;
   }
 }
+
+#undef TYPENAME
 
 #define TYPENAME Stream
 ////////////////////////////////////////////////////////////////////////////////

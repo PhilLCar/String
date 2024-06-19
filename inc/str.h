@@ -18,8 +18,6 @@ OBJECT (const char*) INHERIT (char*)
   int   length;
 END_OBJECT;
 
-STREAMABLE(ss);
-
 String *_(concat)(String *other);
 String *_(append)(char c);
 String *_(prepend)(char c);
@@ -29,8 +27,9 @@ String *_(trim)();
 int     _(equals)(String *other);
 int     _(contains)(String *other);
 
-#undef TYPENAME
+STREAMABLE;
 
+#undef TYPENAME
 // Stream extension
 #define TYPENAME Stream
 

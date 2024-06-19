@@ -3,7 +3,7 @@
 #define TYPENAME String
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(cons)(const char *cstr)
+TYPENAME *_(cons)(const char *cstr)
 {
   if (_this) {
     int   len  = (int)strlen(cstr);
@@ -29,7 +29,7 @@ void _(free)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(concat)(String *other)
+TYPENAME *_(concat)(TYPENAME *other)
 {
   char *n = realloc(_this->base, (_this->length + other->length + 1) * sizeof(char));
 
@@ -46,7 +46,7 @@ String *_(concat)(String *other)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(append)(char c)
+TYPENAME *_(append)(char c)
 {
   char *n = realloc(_this->base, (_this->length + 2) * sizeof(char));
 
@@ -62,7 +62,7 @@ String *_(append)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(prepend)(char c)
+TYPENAME *_(prepend)(char c)
 {
   char *n = realloc(_this->base, (_this->length + 2) * sizeof(char));
 
@@ -78,7 +78,7 @@ String *_(prepend)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(inject)(int index, char c)
+TYPENAME *_(inject)(int index, char c)
 {
   char *n = realloc(_this->base, (_this->length + 2) * sizeof(char));
 
@@ -94,7 +94,7 @@ String *_(inject)(int index, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(substring)(int start, int length)
+TYPENAME *_(substring)(int start, int length)
 {
   char *s;
 
@@ -116,7 +116,7 @@ String *_(substring)(int start, int length)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(trim)() {
+TYPENAME *_(trim)() {
   int start, length;
 
   for (start = 0; start < _this->length; start++) {
@@ -131,13 +131,13 @@ String *_(trim)() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(equals)(String *other)
+int _(equals)(TYPENAME *other)
 {
   return !strcmp(_this->base, other->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(contains)(String *other)
+int _(contains)(TYPENAME *other)
 {
   char *acon  = _this->base;
   int   alen  = _this->length;
@@ -160,13 +160,16 @@ int _(contains)(String *other)
   return pos;
 }
 
+// Streamable
+//==============================================================================
+
 ////////////////////////////////////////////////////////////////////////////////
-StringStream *ssopen(String *s)
+StringStream *_(open)()
 {
   StringStream *ss = malloc(sizeof(StringStream));
 
   if (ss) {
-    ss->base = NEW (String) (s->base);
+    ss->base = NEW (String) (_this->base);
     ss->pos  = 0;
   }
 
@@ -174,14 +177,14 @@ StringStream *ssopen(String *s)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void ssclose(StringStream *ss)
+void STATIC (close)(StringStream *ss)
 {
   DELETE (ss->base);
   free(ss);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int ssgetc(StringStream *ss)
+int STATIC (getc)(StringStream *ss)
 {
   int c = ss->base->base[ss->pos];
 
@@ -192,7 +195,15 @@ int ssgetc(StringStream *ss)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int sspeek(StringStream *ss)
+void STATIC (ungetc)(StringStream *ss, int c)
+{
+  if (ss->pos > 0) {
+    ss->base->base[--ss->pos] = c;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int STATIC (peek)(StringStream *ss)
 {
   int c;
 
@@ -203,14 +214,6 @@ int sspeek(StringStream *ss)
   }
 
   return c;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void ssungetc(int c, StringStream *ss)
-{
-  if (ss->pos > 0) {
-    ss->base->base[--ss->pos] = c;
-  }
 }
 
 #undef TYPENAME

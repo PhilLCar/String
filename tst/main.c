@@ -10,22 +10,28 @@ int main(void)
 
   String *test = NEW (String) ("J'aime les patates!\n");
 
+  String *other = NEW (String) (test->base);
+
+  if (String_equals(test, other))
+  {
+    printf("nice!\n");
+  }
+
+  String_concat(test, other);
+
+  printf("%s\n", test->base);
+
   CHECK_MEMORY
 
   Stream *s = fromString(test);
 
-  while (1)
-  {
-    char c = sgetc(s);
+  String *line = sgetline(s);
 
-    if (s->eos) break;
+  printf("%s\n", line->base);
 
-    printf("%c", c);
-  }
+  DELETE (line);
 
-  fflush(stdout);
-
-  DELETE (test)
+  DELETE (test);
 
   DELETE (s);
 

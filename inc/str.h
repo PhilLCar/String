@@ -35,5 +35,7 @@ STREAMABLE;
 
 String *_(getline)();
 
+__attribute__((unused)) String *(*sgetline)(Stream *) = Stream_getline;
+
 #undef TYPENAME
 #endif

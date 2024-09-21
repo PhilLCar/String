@@ -133,16 +133,18 @@ TYPENAME *_(trim)() {
 ////////////////////////////////////////////////////////////////////////////////
 int _(equals)(TYPENAME *other)
 {
-  return !strcmp(_this->base, other->base);
+  return other->length == _this->length && !strcmp(other->base, _this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(contains)(TYPENAME *other)
+int _(cequals)(const char *other)
 {
-  char *acon  = _this->base;
-  int   alen  = _this->length;
-  char *bcon  = other->base;
-  int   blen  = strlen(bcon); // Allow to call this method with a char *
+  return !strcmp(other, _this->base);
+}
+
+/******************************************************************************/
+int _contains(const char *acon, int alen, const char *bcon, int blen)
+{
   int   match = 0;
   int   pos   = -1;
 
@@ -158,6 +160,74 @@ int _(contains)(TYPENAME *other)
   }
 
   return pos;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(contains)(TYPENAME *other)
+{
+  return _contains(_this->base, _this->length, other->base, other->length);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(ccontains)(const char *other)
+{
+  return _contains(_this->base, _this->length, other, strlen(other));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(starts_with)(const char *other)
+{
+  int starts = 1;
+
+  for (int i = 0; other[i]; i++) {
+    if (other[i] != _this->base[i]) {
+      starts = 0;
+      break;
+    }
+  }
+
+  return starts;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(ends_with)(const char *other)
+{ 
+  int ends = 1;
+  int size = strlen(other);
+
+  for (int i = 0; other[i]; i++) {
+    if (other[i] != _this->base[_this->length - size + i]) {
+      ends = 0;
+      break;
+    }
+  }
+
+  return ends;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+ObjectArray *_(split)(String *other)
+{ 
+  return String_csplit(_this, other->base);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+ObjectArray *_(csplit)(const char *other)
+{ 
+  ObjectArray *array = NEW (ObjectArray) (sizeof(String));
+
+  int len = strlen(other);
+
+  for (
+    int start = 0, end = String_ccontains(_this, other);
+    end >= 0; 
+    start = end + len, end = String_ccontains(_this, other)) {
+    ObjectArray_push(array, String_substring(NEW (String) (_this->base), start, end));
+  }
+
+  ObjectArray_push(array, _this);
+
+  return array;
 }
 
 // Streamable
@@ -222,10 +292,19 @@ int STATIC (peek)(StringStream *ss)
 ////////////////////////////////////////////////////////////////////////////////
 String *_(getline)()
 {
+	return Stream_readline(_this, 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *_(readline)(char esc)
+{
 	String *line = NEW (String) ("");
 	char c;
 
-	while((c = Stream_getc(_this)) != '\n' && c != EOF) String_append(line, c);
+	while((c = Stream_getc(_this)) != '\n' && c != EOF) {
+    if (c == esc) c = Stream_esc(_this);
+    String_append(line, c); 
+  } 
 
 	if (c == EOF && !line->length) {
 		DELETE (line);

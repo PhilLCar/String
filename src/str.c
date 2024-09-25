@@ -3,7 +3,7 @@
 #define TYPENAME String
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(cons)(const char *cstr)
+String *_(cons)(const char *cstr)
 {
   if (_this) {
     int   len  = (int)strlen(cstr);
@@ -29,7 +29,7 @@ void _(free)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(concat)(TYPENAME *other)
+String *_(concat)(String *other)
 {
   char *n = realloc(_this->base, (_this->length + other->length + 1) * sizeof(char));
 
@@ -40,13 +40,14 @@ TYPENAME *_(concat)(TYPENAME *other)
   } else {
     DELETE (_this);
   }
+  
   DELETE (other);
 
   return _this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(append)(char c)
+String *_(append)(char c)
 {
   char *n = realloc(_this->base, (_this->length + 2) * sizeof(char));
 
@@ -62,7 +63,7 @@ TYPENAME *_(append)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(prepend)(char c)
+String *_(prepend)(char c)
 {
   char *n = realloc(_this->base, (_this->length + 2) * sizeof(char));
 
@@ -78,7 +79,7 @@ TYPENAME *_(prepend)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(inject)(int index, char c)
+String *_(inject)(int index, char c)
 {
   char *n = realloc(_this->base, (_this->length + 2) * sizeof(char));
 
@@ -94,7 +95,7 @@ TYPENAME *_(inject)(int index, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(substring)(int start, int length)
+String *_(substring)(int start, int length)
 {
   char *s;
 
@@ -116,7 +117,7 @@ TYPENAME *_(substring)(int start, int length)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(trim)() {
+String *_(trim)() {
   int start, length;
 
   for (start = 0; start < _this->length; start++) {
@@ -131,7 +132,7 @@ TYPENAME *_(trim)() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(equals)(TYPENAME *other)
+int _(equals)(String *other)
 {
   return other->length == _this->length && !strcmp(other->base, _this->base);
 }
@@ -163,7 +164,7 @@ int _contains(const char *acon, int alen, const char *bcon, int blen)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(contains)(TYPENAME *other)
+int _(contains)(String *other)
 {
   return _contains(_this->base, _this->length, other->base, other->length);
 }

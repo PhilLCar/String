@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include <str.h>
+#include <stringstream.h>
+#include <streamext.h>
 
 int main(void)
 {
@@ -23,9 +25,9 @@ int main(void)
 
   CHECK_MEMORY
 
-  Stream *s = fromString(test);
+  StringStream *s = NEW (StringStream) (test);
 
-  String *line = sgetline(s);
+  String *line = sgetline((CharStream*)s);
 
   printf("%s\n", line->base);
 

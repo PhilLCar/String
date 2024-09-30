@@ -1,5 +1,5 @@
-#ifndef STREAMEXT_H
-#define STREAMEXT_H
+#ifndef STRING_STREAM_H
+#define STRING_STREAM_H
 
 // CUT
 #include <diagnostic.h>

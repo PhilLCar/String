@@ -27,7 +27,7 @@ int main(void)
 
   StringStream *s = NEW (StringStream) (test);
 
-  String *line = sgetline((CharStream*)s);
+  String *line = csgetline((CharStream*)s);
 
   printf("%s\n", line->base);
 

@@ -16,6 +16,7 @@ void  _(close)()            VIRTUAL (close);
 void *_(peek) ()            VIRTUAL (peek);
 void *_(get)  ()            VIRTUAL (get);
 void  _(unget)(void *token) VIRTUAL (unget);
+void  _(put)(void *token)   VIRTUAL (put);
 
 #undef TYPENAME
 #endif

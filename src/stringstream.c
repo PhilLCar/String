@@ -59,3 +59,12 @@ void _(unget)(void *token)
     base->base[--this->pos] = (long)token;
   }
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+void _(put)(void *token)
+{
+  String *base = *BASE(2);
+
+  String_inject(base, this->pos++, (long)token);
+}

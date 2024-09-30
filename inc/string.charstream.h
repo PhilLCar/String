@@ -1,11 +1,11 @@
-#ifndef STRING_STREAM_H
-#define STRING_STREAM_H
+#ifndef STRING_CHARSTREAM_H
+#define STRING_CHARSTREAM_H
 
 // CUT
 #include <diagnostic.h>
+#include <oop.h>
 #include <charstream.h>
 #include <str.h>
-#include <oop.h>
 
 #define TYPENAME CharStream
 

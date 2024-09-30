@@ -35,23 +35,3 @@ String *_(readline)()
 
   return line;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-void _(putline)(const char *line)
-{
-	for (int i = 0; line[i]; i++) {
-		CharStream_put(this, line[i]);
-	}
-
-	CharStream_put(this, '\n');
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void _(writeline)(const char *line)
-{
-	for (int i = 0; line[i]; i++) {
-		CharStream_write(this, line[i]);
-	}
-
-	CharStream_put(this, '\n');
-}

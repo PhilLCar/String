@@ -66,5 +66,5 @@ void _(put)(void *token)
 {
   String *base = *BASE(2);
 
-  String_inject(base, this->pos++, (long)token);
+  String_insert(base, this->pos++, (long)token);
 }

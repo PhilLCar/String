@@ -20,15 +20,17 @@ END("");
 String *_(concat)(String *other);
 String *_(append)(char c);
 String *_(prepend)(char c);
-String *_(inject)(int index, char c);
-String *_(substring)(int start, int length);
+String *_(insert)(int index, char c);
+String *_(substr)(int start, int length);
 String *_(trim)();
-int     _(equals)(String *other);
-int     _(contains)(String *other);
-int     _(cequals)(const char *other);
-int     _(ccontains)(const char *other);
-int     _(starts_with)(const char *other);
-int     _(ends_with)(const char *other);
+int     _(equals)(const String *other);
+int     _(eq)(const char *other);
+int     _(compare)(const String *other);
+int     _(cmp)(const char *other);
+int     _(contains)(const String *other);
+int     _(cont)(const char *other);
+int     _(strw)(const char *other);
+int     _(endw)(const char *other);
 
 #undef TYPENAME
 #endif

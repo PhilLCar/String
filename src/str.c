@@ -79,7 +79,7 @@ String *_(prepend)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(inject)(int index, char c)
+String *_(insert)(int index, char c)
 {
   char *n = realloc(this->base, (this->length + 2) * sizeof(char));
 
@@ -95,7 +95,7 @@ String *_(inject)(int index, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(substring)(int start, int length)
+String *_(substr)(int start, int length)
 {
   char *s;
 
@@ -128,19 +128,31 @@ String *_(trim)() {
     char c = this->base[start + length - 1];
     if (c != ' ' && c != '\t') break;
   }
-  return String_substring(this, start, length);
+  return String_substr(this, start, length);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(equals)(String *other)
+int _(equals)(const String *other)
 {
   return other->length == this->length && !strcmp(other->base, this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(cequals)(const char *other)
+int _(eq)(const char *other)
 {
   return !strcmp(other, this->base);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(conpare)(const String *other)
+{
+  return strcmp(other->base, this->base);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(cmp)(const char *other)
+{
+  return strcmp(other, this->base);
 }
 
 /******************************************************************************/
@@ -164,19 +176,19 @@ int _contains(const char *acon, int alen, const char *bcon, int blen)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(contains)(String *other)
+int _(contains)(const String *other)
 {
   return _contains(this->base, this->length, other->base, other->length);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(ccontains)(const char *other)
+int _(cont)(const char *other)
 {
   return _contains(this->base, this->length, other, strlen(other));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(starts_with)(const char *other)
+int _(strw)(const char *other)
 {
   int starts = 1;
 
@@ -191,7 +203,7 @@ int _(starts_with)(const char *other)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(ends_with)(const char *other)
+int _(endw)(const char *other)
 { 
   int ends = 1;
   int size = strlen(other);

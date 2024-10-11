@@ -8,11 +8,11 @@ String *_(getline)()
 	String *line = NEW (String) ("");
 	char c;
 
-	while((c = CharStream_get(this)) != '\n' && c != EOF) {
+	while((c = CharStream_get(this)) != '\n' && !BASE(0)->eos) {
     if (c != '\r') String_append(line, c); 
   } 
 
-	if (c == EOF && !line->length) {
+	if (BASE(0)->eos && !line->length) {
 		DELETE (line);
 	}
 
@@ -25,11 +25,11 @@ String *_(readline)()
 	String *line = NEW (String) ("");
 	char c;
 
-	while((c = CharStream_read(this)) != '\n' && c != EOF) {
+	while((c = CharStream_read(this)) != '\n' && !BASE(0)->eos) {
     if (c != '\r') String_append(line, c); 
   } 
 
-	if (c == EOF && !line->length) {
+	if (BASE(0)->eos && !line->length) {
 		DELETE (line);
 	}
 

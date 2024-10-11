@@ -31,11 +31,7 @@ void *_(peek)()
 {
   String *base = *BASE(2);
 
-  long c = (long)base->base[this->pos];
-
-  if (!c) c = EOF;
-
-  return (void*)c;
+  return (void*)(long)base->base[this->pos];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +39,7 @@ void *_(get)()
 {
   void *peek = StringStream_peek(this);
 
-  if (peek != EOS) ++this->pos;
+  if (!(BASE(1)->eos = !peek)) ++this->pos;
 
   return peek;
 }
@@ -58,6 +54,8 @@ void _(unget)(void *token)
   } else {  
     base->base[--this->pos] = (long)token;
   }
+
+  BASE(1)->eos = 0;
 }
 
 

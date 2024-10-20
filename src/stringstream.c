@@ -27,17 +27,17 @@ void _(close)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void *_(peek)()
+int _(peek)()
 {
   String *base = *BASE(2);
 
-  return (void*)(long)base->base[this->pos];
+  return base->base[this->pos];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void *_(get)()
+int _(get)()
 {
-  void *peek = StringStream_peek(this);
+  int peek = StringStream_peek(this);
 
   if (!(BASE(1)->eos = !peek)) ++this->pos;
 
@@ -45,14 +45,14 @@ void *_(get)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(void *token)
+void _(unget)(int c)
 {
   String *base = *BASE(2);
 
-  if (this->pos) {
-    String_prepend(base, (long)token);
+  if (!this->pos) {
+    String_prepend(base, c);
   } else {  
-    base->base[--this->pos] = (long)token;
+    base->base[--this->pos] = c;
   }
 
   BASE(1)->eos = 0;
@@ -60,9 +60,9 @@ void _(unget)(void *token)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(void *token)
+void _(put)(int c)
 {
   String *base = *BASE(2);
 
-  String_insert(base, this->pos++, (long)token);
+  String_insert(base, this->pos++, c);
 }

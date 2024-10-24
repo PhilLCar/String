@@ -113,6 +113,7 @@ String *_(substr)(int start, int length)
   } else {
     DELETE (this);
   }
+  
   return this;
 }
 
@@ -122,11 +123,11 @@ String *_(trim)() {
 
   for (start = 0; start < this->length; start++) {
     char c = this->base[start];
-    if (c != ' ' && c != '\t') break;
+    if (c != ' ' && c != '\t' && c != '\n' && c != '\r') break;
   }
   for (length = this->length - start; length > 0; length--) {
     char c = this->base[start + length - 1];
-    if (c != ' ' && c != '\t') break;
+    if (c != ' ' && c != '\t' && c != '\n' && c != '\r') break;
   }
   return String_substr(this, start, length);
 }

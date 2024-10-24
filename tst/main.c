@@ -2,7 +2,7 @@
 
 #include <str.h>
 #include <stringstream.h>
-#include <str.charstream.h>
+#include <string.charstream.h>
 
 int main(void)
 {

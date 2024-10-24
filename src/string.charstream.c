@@ -1,4 +1,4 @@
-#include <str.charstream.h>
+#include <string.charstream.h>
 
 #define TYPENAME CharStream
 

@@ -14,7 +14,7 @@
 // A string of characters, with length
 #define TYPENAME String
 
-OBJECT (const char*) INHERIT (char*)
+OBJECT (const char*) BASED (char*)
   int   length;
 END_OBJECT("");
 

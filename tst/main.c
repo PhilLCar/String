@@ -14,12 +14,12 @@ int main(void)
 
   String *other = NEW (String) (test->base);
 
-  if (String_equals(test, other))
+  if (String_Equals(test, other))
   {
     printf("nice!\n");
   }
 
-  String_concat(test, other);
+  String_Concat(test, other);
 
   printf("%s\n", test->base);
 
@@ -27,7 +27,7 @@ int main(void)
 
   StringStream *s = NEW (StringStream) (test);
 
-  String *line = csgetline((CharStream*)s);
+  String *line = CharStream_GetLine((CharStream*)s);
 
   printf("%s\n", line->base);
 

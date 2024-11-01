@@ -3,7 +3,7 @@
 #define TYPENAME String
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(cons)(const char *cstr)
+String *_(Construct)(const char *cstr)
 {
   if (this) {
     int   len  = (int)strlen(cstr);
@@ -14,22 +14,26 @@ String *_(cons)(const char *cstr)
       this->base   = base;
       strcpy(base, cstr);
     } else {
-      free(this);
-      this = NULL;
+      THROW(NEW (MemoryAllocationException)());
     }
+  } else {
+    THROW(NEW (MemoryAllocationException)());
   }
 
   return this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(free)()
+void _(Destruct)()
 {
-  if (this) free(this->base);
+  if (this && this->base) {
+    free(this->base);
+    this->base = NULL;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(concat)(String *other)
+String *_(Concat)(String *other)
 {
   char *n = realloc(this->base, (this->length + other->length + 1) * sizeof(char));
 
@@ -47,7 +51,7 @@ String *_(concat)(String *other)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(append)(char c)
+String *_(Append)(char c)
 {
   char *n = realloc(this->base, (this->length + 2) * sizeof(char));
 
@@ -63,7 +67,7 @@ String *_(append)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(prepend)(char c)
+String *_(Prepend)(char c)
 {
   char *n = realloc(this->base, (this->length + 2) * sizeof(char));
 
@@ -79,7 +83,7 @@ String *_(prepend)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(insert)(int index, char c)
+String *_(Insert)(int index, char c)
 {
   char *n = realloc(this->base, (this->length + 2) * sizeof(char));
 
@@ -95,7 +99,7 @@ String *_(insert)(int index, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(substr)(int start, int length)
+String *_(SubString)(int start, int length)
 {
   char *s;
 
@@ -118,46 +122,49 @@ String *_(substr)(int start, int length)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(trim)() {
+String *_(Trim)()
+{
   int start, length;
 
   for (start = 0; start < this->length; start++) {
     char c = this->base[start];
     if (c != ' ' && c != '\t' && c != '\n' && c != '\r') break;
   }
+
   for (length = this->length - start; length > 0; length--) {
     char c = this->base[start + length - 1];
     if (c != ' ' && c != '\t' && c != '\n' && c != '\r') break;
   }
-  return String_substr(this, start, length);
+
+  return String_SubString(this, start, length);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(equals)(const String *other)
+int CONST (Equals)(const String *other)
 {
   return other->length == this->length && !strcmp(other->base, this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(eq)(const char *other)
+int CONST (Eq)(const char *other)
 {
   return !strcmp(other, this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(conpare)(const String *other)
+int CONST (Compare)(const String *other)
 {
   return strcmp(other->base, this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(cmp)(const char *other)
+int CONST (Cmp)(const char *other)
 {
   return strcmp(other, this->base);
 }
 
 /******************************************************************************/
-int _contains(const char *acon, int alen, const char *bcon, int blen)
+int STATIC (contains)(const char *acon, int alen, const char *bcon, int blen)
 {
   int   match = 0;
   int   pos   = -1;
@@ -177,19 +184,19 @@ int _contains(const char *acon, int alen, const char *bcon, int blen)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(contains)(const String *other)
+int CONST (Contains)(const String *other)
 {
-  return _contains(this->base, this->length, other->base, other->length);
+  return String_contains(this->base, this->length, other->base, other->length);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(cont)(const char *other)
+int CONST (Cnt)(const char *other)
 {
-  return _contains(this->base, this->length, other, strlen(other));
+  return String_contains(this->base, this->length, other, strlen(other));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(strw)(const char *other)
+int CONST (StartsWith)(const char *other)
 {
   int starts = 1;
 
@@ -204,7 +211,7 @@ int _(strw)(const char *other)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(endw)(const char *other)
+int CONST (EndsWith)(const char *other)
 { 
   int ends = 1;
   int size = strlen(other);
@@ -218,3 +225,5 @@ int _(endw)(const char *other)
 
   return ends;
 }
+
+#undef TYPENAME

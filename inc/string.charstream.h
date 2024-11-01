@@ -10,12 +10,9 @@
 #define TYPENAME CharStream
 
 // Gets the line as is
-String *_(getline)();
+String *_(GetLine)();
 // Gets the line and interprets what's after the escape char
-String *_(readline)();
-
-__attribute__((unused)) static String *(*csgetline)  (CharStream*) = CharStream_getline;
-__attribute__((unused)) static String *(*csreadline) (CharStream*) = CharStream_readline;
+String *_(ReadLine)();
 
 #undef TYPENAME
 #endif

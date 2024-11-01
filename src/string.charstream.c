@@ -3,13 +3,13 @@
 #define TYPENAME CharStream
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(getline)()
+String *_(GetLine)()
 {
 	String *line = NEW (String) ("");
 	char c;
 
-	while((c = CharStream_get(this)) != '\n' && !BASE(0)->eos) {
-    if (c != '\r') String_append(line, c); 
+	while((c = CharStream_Get(this)) != '\n' && !BASE(0)->eos) {
+    if (c != '\r') String_Append(line, c); 
   } 
 
 	if (BASE(0)->eos && !line->length) {
@@ -20,13 +20,13 @@ String *_(getline)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *_(readline)()
+String *_(ReadLine)()
 {
 	String *line = NEW (String) ("");
 	char c;
 
-	while((c = CharStream_read(this)) != '\n' && !BASE(0)->eos) {
-    if (c != '\r') String_append(line, c); 
+	while((c = CharStream_Read(this)) != '\n' && !BASE(0)->eos) {
+    if (c != '\r') String_Append(line, c); 
   } 
 
 	if (BASE(0)->eos && !line->length) {
@@ -35,3 +35,5 @@ String *_(readline)()
 
   return line;
 }
+
+#undef TYPENAME

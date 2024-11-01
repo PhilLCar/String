@@ -3,31 +3,29 @@
 #define TYPENAME StringStream
 
 ////////////////////////////////////////////////////////////////////////////////
-StringStream *_(cons)(String *current)
+StringStream *_(Construct)(String *current)
 {
-  if (this)
-  {
-    CharStream_cons(BASE(0), NEW (String) (current->base));
-    this->pos = 0;
-  }
+  CharStream_Construct(BASE(0), NEW (String) (current->base));
+
+  this->pos = 0;
 
   return this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(free)()
+void _(Destruct)()
 {
-  CharStream_free(BASE(0));
+  CharStream_Destruct(BASE(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(close)()
+void _(Close)()
 {
   DELETE (*BASE(2));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(peek)()
+int _(Peek)()
 {
   String *base = *BASE(2);
 
@@ -35,9 +33,9 @@ int _(peek)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(get)()
+int _(Get)()
 {
-  int peek = StringStream_peek(this);
+  int peek = StringStream_Peek(this);
 
   if (!(BASE(1)->eos = !peek)) ++this->pos;
 
@@ -45,12 +43,12 @@ int _(get)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(int c)
+void _(Unget)(int c)
 {
   String *base = *BASE(2);
 
   if (!this->pos) {
-    String_prepend(base, c);
+    String_Prepend(base, c);
   } else {  
     base->base[--this->pos] = c;
   }
@@ -60,9 +58,11 @@ void _(unget)(int c)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(int c)
+void _(Put)(int c)
 {
   String *base = *BASE(2);
 
-  String_insert(base, this->pos++, c);
+  String_Insert(base, this->pos++, c);
 }
+
+#undef TYPENAME

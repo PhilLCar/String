@@ -9,28 +9,30 @@
 // CUT
 #include <diagnostic.h>
 #include <oop.h>
+#include <exception.h>
 
 // A string of characters, with length
 #define TYPENAME String
 
 OBJECT (const char*) INHERIT (char*)
   int   length;
-END("");
+END_OBJECT("");
 
-String *_(concat)(String *other);
-String *_(append)(char c);
-String *_(prepend)(char c);
-String *_(insert)(int index, char c);
-String *_(substr)(int start, int length);
-String *_(trim)();
-int     _(equals)(const String *other);
-int     _(eq)(const char *other);
-int     _(compare)(const String *other);
-int     _(cmp)(const char *other);
-int     _(contains)(const String *other);
-int     _(cont)(const char *other);
-int     _(strw)(const char *other);
-int     _(endw)(const char *other);
+String *_(Concat)(String *other);
+String *_(Append)(char c);
+String *_(Prepend)(char c);
+String *_(Insert)(int index, char c);
+String *_(SubString)(int start, int length);
+String *_(Trim)();
+
+int CONST (Equals)(const String *other);
+int CONST (Eq)(const char *other);
+int CONST (Compare)(const String *other);
+int CONST (Cmp)(const char *other);
+int CONST (Contains)(const String *other);
+int CONST (Cnt)(const char *other);
+int CONST (StartsWith)(const char *other);
+int CONST (EndsWith)(const char *other);
 
 #undef TYPENAME
 #endif

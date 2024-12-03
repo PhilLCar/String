@@ -56,7 +56,7 @@ String *_(Append)(char c)
   char *n = realloc(this->base, (this->length + 2) * sizeof(char));
 
   if (n) {
-    this->base                  = n;
+    this->base                 = n;
     this->base[this->length]   = c;
     this->base[++this->length] = 0;
   } else {

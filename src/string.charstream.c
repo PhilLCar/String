@@ -1,5 +1,7 @@
 #include <string.charstream.h>
 
+#ifdef STRING_CHARSTREAM_H
+
 #define TYPENAME CharStream
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,3 +39,5 @@ String *_(ReadLine)()
 }
 
 #undef TYPENAME
+
+#endif

@@ -1,3 +1,6 @@
+#if defined(CHARSTREAM_H) || 1
+// TODO: Replace 1 with defined(STRING)
+
 #ifndef STRING_CHARSTREAM_H
 #define STRING_CHARSTREAM_H
 
@@ -15,4 +18,6 @@ String *_(GetLine)();
 String *_(ReadLine)();
 
 #undef TYPENAME
+#endif
+
 #endif

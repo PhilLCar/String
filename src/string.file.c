@@ -36,7 +36,10 @@ String *STATIC (Folder)(const char *path)
 {
   char buffer[4096];
 
-  filepath(path, buffer, sizeof(buffer));
+  int len = filepath(path, buffer, sizeof(buffer));
+
+  // Remove the trailing '/'
+  buffer[len] = 0;
 
   return NEW (String) (buffer);
 }

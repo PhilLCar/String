@@ -46,6 +46,8 @@ String *_(ReadToEnd)()
 	String *line;
 
 	while ((line = CharStream_ReadLine(this))) {
+		if (result->length) String_Append(result, '\n');
+
 		String_Concat(result, line);
 	}
 

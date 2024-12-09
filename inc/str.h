@@ -19,6 +19,7 @@ OBJECT (const char*) BASED (char*)
 END_OBJECT("");
 
 String *_(Concat)(String *other);
+String *_(Cat)(const char *other);
 String *_(Append)(char c);
 String *_(Prepend)(char c);
 String *_(Insert)(int index, char c);

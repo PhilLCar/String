@@ -140,6 +140,28 @@ String *_(Trim)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+String *_(ToLower)()
+{
+  for (int i = 0; i < this->length; i++)
+  {
+    if (i >= 'A' && i <= 'Z') i += 'a' - 'A';
+  }
+
+  return this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *_(ToUpper)()
+{
+  for (int i = 0; i < this->length; i++)
+  {
+    if (i >= 'a' && i <= 'z') i += 'A' - 'a';
+  }
+
+  return this;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int CONST (Equals)(const String *other)
 {
   return other->length == this->length && !strcmp(other->base, this->base);

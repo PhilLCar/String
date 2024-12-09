@@ -24,6 +24,8 @@ String *_(Prepend)(char c);
 String *_(Insert)(int index, char c);
 String *_(SubString)(int start, int length);
 String *_(Trim)();
+String *_(ToLower)();
+String *_(ToUpper)();
 
 int CONST (Equals)(const String *other);
 int CONST (Eq)(const char *other);

@@ -144,7 +144,9 @@ String *_(ToLower)()
 {
   for (int i = 0; i < this->length; i++)
   {
-    if (i >= 'A' && i <= 'Z') i += 'a' - 'A';
+    char *base = this->base;
+
+    if (base[i] >= 'A' && base[i] <= 'Z') base[i] += 'a' - 'A';
   }
 
   return this;
@@ -155,7 +157,9 @@ String *_(ToUpper)()
 {
   for (int i = 0; i < this->length; i++)
   {
-    if (i >= 'a' && i <= 'z') i += 'A' - 'a';
+    char *base = this->base;
+
+    if (base[i] >= 'a' && base[i] <= 'z') base[i] += 'A' - 'a';
   }
 
   return this;

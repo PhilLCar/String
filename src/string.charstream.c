@@ -38,6 +38,22 @@ String *_(ReadLine)()
   return line;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+String *_(ReadToEnd)()
+{
+	String *result = NEW (String) ("");
+
+	String *line;
+
+	while ((line = CharStream_ReadLine(this))) {
+		String_Concat(result, line);
+	}
+
+	DELETE (this);
+
+	return result;
+}
+
 #undef TYPENAME
 
 #endif

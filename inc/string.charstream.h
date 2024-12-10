@@ -18,6 +18,9 @@ String *_(GetLine)();
 // Gets the line and interprets what's after the escape char
 String *_(ReadLine)();
 
+// Gets and consume the stream
+String *_(GetToEnd)();
+
 // Reads and consume the stream
 String *_(ReadToEnd)();
 

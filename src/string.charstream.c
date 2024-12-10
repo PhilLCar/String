@@ -39,6 +39,24 @@ String *_(ReadLine)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+String *_(GetToEnd)()
+{
+	String *result = NEW (String) ("");
+
+	String *line;
+
+	while ((line = CharStream_GetLine(this))) {
+		if (result->length) String_Append(result, '\n');
+
+		String_Concat(result, line);
+	}
+
+	DELETE (this);
+
+	return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 String *_(ReadToEnd)()
 {
 	String *result = NEW (String) ("");

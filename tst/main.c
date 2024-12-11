@@ -1,11 +1,14 @@
 #include <stdio.h>
 
 #include <str.h>
-#include <stringstream.h>
-#include <string.charstream.h>
+#include <print.h>
 
 int main(void)
 {
+  String *ok = NEW (String) ("Allo!");
+
+  print("Je dis: %Of %d %E\n", ok, 1, .45);
+
   printf("Yé!\n");
 
   CHECK_MEMORY
@@ -25,17 +28,7 @@ int main(void)
 
   CHECK_MEMORY
 
-  StringStream *s = NEW (StringStream) (test);
-
-  String *line = CharStream_GetLine((CharStream*)s);
-
-  printf("%s\n", line->base);
-
-  DELETE (line);
-
   DELETE (test);
-
-  DELETE (s);
 
   CHECK_MEMORY
 

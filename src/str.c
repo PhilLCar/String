@@ -1,5 +1,8 @@
 #include <str.h>
 
+#define MAX_BUFFER_LENGTH   4096
+#define MAX_FORMAT_LENGTH   64
+
 #define TYPENAME String
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +52,6 @@ String *_(Concat)(String *other)
 
   return this;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 String *_(Cat)(const char *other)
@@ -173,6 +175,12 @@ String *_(ToUpper)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+String *CONST (Copy)()
+{
+  return NEW (String) (this->base);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int CONST (Equals)(const String *other)
 {
   return other->length == this->length && !strcmp(other->base, this->base);
@@ -257,6 +265,72 @@ int CONST (EndsWith)(const char *other)
   }
 
   return ends;
+}
+
+/******************************************************************************/
+String *STATIC (format)(const char *format, va_list list)
+{
+  String *buffer = NEW (String) ("");
+  
+  char prtbuf[MAX_BUFFER_LENGTH];
+  char fmtbuf[MAX_FORMAT_LENGTH];
+
+  for (int i = 0; format[i]; i++) {
+    if (format[i] == '%') {
+      i += _extract_format(&format[i], fmtbuf);
+
+      if (!strcmp(fmtbuf, "%O")) {
+        String_Concat(buffer, String_ToString(va_arg(list, void*)));
+      } else if (!strcmp(fmtbuf, "%Of")) {
+        void *object = va_arg(list, void*);
+
+        String_Concat(buffer, String_ToString(object));
+
+        DELETE(object);
+      } else {
+        vsprintf(prtbuf, fmtbuf, list);
+        String_Cat(buffer, prtbuf);
+      }
+    } else {
+      String_Append(buffer, format[i]);
+    }
+  }
+
+  return buffer;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *STATIC (Format)(const char *format, ...)
+{
+  va_list argv;
+  va_start(argv, format);
+
+  String *formatted = String_format(format, argv);
+
+  va_end(argv);
+
+  return formatted;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *STATIC (ToString)(void *object)
+{
+  String *result = NULL;
+
+  if (object) {
+    const Type      *type     = gettype(object);
+    VirtualFunction  toString = virtual(type, "ToString");
+
+    if (toString) {
+      result = toString(object);
+    } else {
+      result = String_Format("{%s at %p}", type->name, object);
+    }
+  } else {
+    result = NEW (String) ("(null)");
+  }
+
+  return result;
 }
 
 #undef TYPENAME

@@ -1,6 +1,5 @@
-#if defined(FILE_H) || 1
-// TODO: Replace 1 with defined(STRING)
-// TODO: Standardize those library interfaces to a certain point
+#if defined(FILE_H) || defined(LIBRARY) || 1
+// TODO: remove 1
 
 #ifndef STRING_FILE_H
 #define STRING_FILE_H
@@ -9,7 +8,7 @@
 #include <str.h>
 #include <file.h>
 
-// "static class"
+// Static Class
 #define TYPENAME Path
 
 String *STATIC (File)(const char *path);

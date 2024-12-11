@@ -11,6 +11,8 @@
 #include <oop.h>
 #include <exception.h>
 
+#include "_format.h"
+
 // A string of characters, with length
 #define TYPENAME String
 
@@ -28,6 +30,9 @@ String *_(Trim)();
 String *_(ToLower)();
 String *_(ToUpper)();
 
+String *CONST (Copy)();
+FOREIGN_VIRTUAL(ToString, String_Copy);
+
 int CONST (Equals)(const String *other);
 int CONST (Eq)(const char *other);
 int CONST (Compare)(const String *other);
@@ -36,6 +41,10 @@ int CONST (Contains)(const String *other);
 int CONST (Cnt)(const char *other);
 int CONST (StartsWith)(const char *other);
 int CONST (EndsWith)(const char *other);
+
+String *STATIC (Format)(const char *format, ...);
+String *STATIC (ToString)(void *object);
+
 
 #undef TYPENAME
 #endif

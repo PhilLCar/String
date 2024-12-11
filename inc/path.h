@@ -1,4 +1,4 @@
-#if defined(FILE_H) || defined(LIBRARY) || 1
+#if defined(FILE_H) || defined(STRING) || 1
 // TODO: remove 1
 
 #ifndef STRING_FILE_H

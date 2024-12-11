@@ -277,7 +277,7 @@ String *STATIC (format)(const char *format, va_list list)
 
   for (int i = 0; format[i]; i++) {
     if (format[i] == '%') {
-      i += _extract_format(&format[i], fmtbuf);
+      i += _format_extract(&format[i], fmtbuf);
 
       if (!strcmp(fmtbuf, "%O")) {
         String_Concat(buffer, String_ToString(va_arg(list, void*)));

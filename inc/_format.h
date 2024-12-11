@@ -3,6 +3,6 @@
 
 #include <string.h>
 
-int _extract_format(const char *format, char buffer[]);
+int _format_extract(const char *format, char buffer[]);
 
 #endif

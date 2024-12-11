@@ -30,7 +30,7 @@ const char *_formats[] = {
 };
 
 /******************************************************************************/
-int _startsw(const char *a, const char *b)
+int _format_startsw(const char *a, const char *b)
 {
   int i;
 
@@ -42,12 +42,12 @@ int _startsw(const char *a, const char *b)
 }
 
 /******************************************************************************/
-int _match(const char *format)
+int _format_match(const char *format)
 {
   int max   = 0;
 
   for (int i = 0; i < (sizeof(_formats) / sizeof(char*)); i++) {
-    int match = _startsw(format, _formats[i] + 1);
+    int match = _format_startsw(format, _formats[i] + 1);
 
     if (match > max) {
       max = match;
@@ -59,12 +59,12 @@ int _match(const char *format)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-int _extract_format(const char *format, char buffer[])
+int _format_extract(const char *format, char buffer[])
 {
   if (*format != '%') return 0;
 
   for (const char *c = format + 1; *c; c++) {
-    int match = _match(c);
+    int match = _format_match(c);
 
     if (match) {
       int size = c - format + match;

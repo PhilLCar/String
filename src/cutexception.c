@@ -2,6 +2,8 @@
 
 #define TYPENAME CutException
 
+String *String_format(const char *format, va_list list);
+
 CutException *_(Construct)(const char *message, ...)
 {
   if (this) {

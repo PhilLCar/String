@@ -26,7 +26,8 @@ const char *_formats[] = {
   "%n",   // nothing
   "%%",   // %
   "%O",   // CUT Object
-  "%Of"   // CUT Object (free)
+  "%Of",  // CUT Object (free)
+  "%OT",  // CUT Object (type specified)
 };
 
 /******************************************************************************/

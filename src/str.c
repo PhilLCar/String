@@ -287,6 +287,14 @@ String *STATIC (format)(const char *format, va_list list)
         String_Concat(buffer, String_ToString(object));
 
         DELETE(object);
+      } else if (!strcmp(fmtbuf, "%OT")) {
+        void       *object = va_arg(list, void*);
+        const Type *type   = va_arg(list, void*);
+        void       *tmp    = talloc(type);
+
+        memcpy(tmp, object, type->size);
+        String_Concat(buffer, String_ToString(tmp));
+        free(tmp);
       } else {
         vsprintf(prtbuf, fmtbuf, list);
         String_Cat(buffer, prtbuf);

@@ -1,5 +1,5 @@
-#ifndef STR_UTILS
-#define STR_UTILS
+#ifndef STR_H
+#define STR_H
 
 // C
 #include <stdio.h>

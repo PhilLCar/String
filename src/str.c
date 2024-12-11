@@ -294,7 +294,7 @@ String *STATIC (format)(const char *format, va_list list)
 
         memcpy(tmp, object, type->size);
         String_Concat(buffer, String_ToString(tmp));
-        free(tmp);
+        tfree(tmp);
       } else {
         vsprintf(prtbuf, fmtbuf, list);
         String_Cat(buffer, prtbuf);

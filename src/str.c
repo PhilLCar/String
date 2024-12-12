@@ -310,7 +310,6 @@ String *STATIC (format)(const char *format, va_list list)
     if (format[i] == '%') {
       i += _format_extract(&format[i], fmtbuf, prmbuf, typbuf);
 
-      // TODO: Support padding, like "%-3O" or "%16O"
       if (typbuf[0] == 'O') {
         if (typbuf[1] == 0) {
           String_Concat(buffer, String_justify(String_ToString(va_arg(list, void*)), prmbuf));

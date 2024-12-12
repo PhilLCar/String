@@ -44,9 +44,9 @@ int CONST (EndsWith)(const char *other);
 String *STATIC (Format)(const char *format, ...);
 String *STATIC (ToString)(void *object);
 
-FOREIGN_VIRTUAL(ToString,     String_Copy);
-FOREIGN_VIRTUAL(BaseComparer, String_Cmp);
-FOREIGN_VIRTUAL(Comparer,     String_Compare);
+FOREIGN_VIRTUAL(ToString,    String_Copy);
+FOREIGN_VIRTUAL(KeyComparer, String_Cmp);
+FOREIGN_VIRTUAL(Comparer,    String_Compare);
 
 #undef TYPENAME
 #endif

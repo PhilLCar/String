@@ -82,7 +82,7 @@ String *_(Prepend)(char c)
 
   if (n) {
     this->base = n;
-    for (int i = this->length + 1; i > 0; i--) this->base[i] = this->base[i - 1];
+    for (int i = ++this->length; i > 0; i--) this->base[i] = this->base[i - 1];
     this->base[0] = c;
   } else {
     DELETE (this);
@@ -268,33 +268,68 @@ int CONST (EndsWith)(const char *other)
 }
 
 /******************************************************************************/
+String *_(justify)(const char *param)
+{
+  char c = param[0];
+
+  if (c == '+') {
+    int size = atoi(param + 1);
+
+    while (size > this->length) {
+      String_Prepend(this, ' ');
+    }
+  } else if (c == '-') { 
+    int size = -atoi(param);
+
+    while (size > this->length) {
+      String_Append(this, ' ');
+    }
+
+  } else if (c) { // center
+    int size = atoi(param);
+
+    while (size > this->length) {
+      (this->length % 2 ? String_Append : String_Prepend)(this, ' ');
+    }
+  }
+
+  return this;
+}
+
+/******************************************************************************/
 String *STATIC (format)(const char *format, va_list list)
 {
   String *buffer = NEW (String) ("");
   
   char prtbuf[MAX_BUFFER_LENGTH];
   char fmtbuf[MAX_FORMAT_LENGTH];
+  char prmbuf[MAX_FORMAT_LENGTH];
+  char typbuf[MAX_BUFFER_LENGTH];
 
   for (int i = 0; format[i]; i++) {
     if (format[i] == '%') {
-      i += _format_extract(&format[i], fmtbuf);
+      i += _format_extract(&format[i], fmtbuf, prmbuf, typbuf);
 
-      if (!strcmp(fmtbuf, "%O")) {
-        String_Concat(buffer, String_ToString(va_arg(list, void*)));
-      } else if (!strcmp(fmtbuf, "%Of")) {
-        void *object = va_arg(list, void*);
+      // TODO: Support padding, like "%-3O" or "%16O"
+      if (typbuf[0] == 'O') {
+        if (typbuf[1] == 0) {
+          String_Concat(buffer, String_justify(String_ToString(va_arg(list, void*)), prmbuf));
+        } else if (typbuf[1] == 'f') {
+          void *object = va_arg(list, void*);
 
-        String_Concat(buffer, String_ToString(object));
+          String_Concat(buffer, String_justify(String_ToString(object), prmbuf));
 
-        DELETE(object);
-      } else if (!strcmp(fmtbuf, "%OT")) {
-        void       *object = va_arg(list, void*);
-        const Type *type   = va_arg(list, void*);
-        void       *tmp    = talloc(type);
+          DELETE(object);
+        } else if (typbuf[1] == 'T') {
+          void       *object = va_arg(list, void*);
+          const Type *type   = va_arg(list, void*);
+          void       *tmp    = talloc(type);
 
-        memcpy(tmp, object, type->size);
-        String_Concat(buffer, String_ToString(tmp));
-        tfree(tmp);
+          memcpy(tmp, object, type->size);
+          String_Concat(buffer, String_justify(String_ToString(tmp), prmbuf));
+
+          tfree(tmp);
+        }
       } else {
         vsprintf(prtbuf, fmtbuf, list);
         String_Cat(buffer, prtbuf);

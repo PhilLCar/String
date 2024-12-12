@@ -7,7 +7,9 @@ int main(void)
 {
   String *ok = NEW (String) ("Allo!");
 
-  print("Je dis: %Of %d %E\n", ok, 1, .45);
+  // Those two lines must give the same outptu
+  printf("Je dis: %8s %d %E\n", "Allo!", 1, .45);
+  print("Je dis: %+8Of %d %E\n", ok, 1, .45);
 
   printf("Yé!\n");
 

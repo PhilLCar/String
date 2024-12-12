@@ -45,7 +45,7 @@ int _format_startsw(const char *a, const char *b)
 /******************************************************************************/
 int _format_match(const char *format)
 {
-  int max   = 0;
+  int max = 0;
 
   for (int i = 0; i < (sizeof(_formats) / sizeof(char*)); i++) {
     int match = _format_startsw(format, _formats[i] + 1);
@@ -60,7 +60,7 @@ int _format_match(const char *format)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-int _format_extract(const char *format, char buffer[])
+int _format_extract(const char *format, char whole[], char param[], char type[])
 {
   if (*format != '%') return 0;
 
@@ -70,9 +70,22 @@ int _format_extract(const char *format, char buffer[])
     if (match) {
       int size = c - format + match;
 
-      memcpy(buffer, format, size);
-      
-      buffer[size] = 0;
+      if (whole) {
+        memcpy(whole, format, size);
+        whole[size] = 0;
+      }
+
+      if (param) {
+        int psize =  c - format - 1;
+
+        memcpy(param, format + 1, psize);
+        param[psize] = 0;
+      }
+
+      if (type) {
+        memcpy(type, c, match);
+        type[match] = 0;
+      }
 
       return size - 1;
     }

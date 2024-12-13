@@ -1,8 +1,5 @@
 #include <str.h>
 
-#define MAX_BUFFER_LENGTH   4096
-#define MAX_FORMAT_LENGTH   64
-
 #define TYPENAME String
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -301,10 +298,9 @@ String *STATIC (format)(const char *format, va_list list)
 {
   String *buffer = NEW (String) ("");
   
-  char prtbuf[MAX_BUFFER_LENGTH];
-  char fmtbuf[MAX_FORMAT_LENGTH];
-  char prmbuf[MAX_FORMAT_LENGTH];
-  char typbuf[MAX_BUFFER_LENGTH];
+  char fmtbuf[STRING_MAX_FORMAT_LENGTH];
+  char prmbuf[STRING_MAX_FORMAT_LENGTH];
+  char typbuf[STRING_MAX_FORMAT_LENGTH];
 
   for (int i = 0; format[i]; i++) {
     if (format[i] == '%') {
@@ -330,8 +326,13 @@ String *STATIC (format)(const char *format, va_list list)
           tfree(tmp);
         }
       } else {
-        vsprintf(prtbuf, fmtbuf, list);
-        String_Cat(buffer, prtbuf);
+        va_list  copy;
+        String  *result = BUFFERIZE(({ va_copy(copy, list); vsnprintf(buffer, sizeof(buffer), fmtbuf, copy);}); va_end(copy))
+
+        // Advance the real list (not the copy)
+        vsnprintf(NULL, 0, fmtbuf, list);
+
+        String_Concat(buffer, result);
       }
     } else {
       String_Append(buffer, format[i]);

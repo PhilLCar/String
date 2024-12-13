@@ -6,53 +6,34 @@
 
 String *STATIC (File)(const char *path)
 {
-  char buffer[4096];
-
-  filenamewopath(path, buffer, sizeof(buffer));
-
-  return NEW (String) (buffer);
+  return BUFFERIZE(filenamewopath(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (FileName)(const char *path)
 {
-  char buffer[4096];
-
-  filenamewopath(path, buffer, sizeof(buffer));
-  filenamewoext(buffer, buffer, sizeof(buffer));
-
-  return NEW (String) (buffer);
+  return BUFFERIZE(filenamewoext(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (Extension)(const char *path)
 {
-  char buffer[4096];
-
-  fileext(path, buffer, sizeof(buffer));
-
-  return NEW (String) (buffer);
+  return BUFFERIZE(fileext(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (Folder)(const char *path)
 {
-  char buffer[4096];
+  String *result = BUFFERIZE(filepath(path, sizeof(buffer), buffer));
 
-  int len = filepath(path, buffer, sizeof(buffer));
-
-  if (len > 0) {
+  while (result && result->length > 1 && result->base[result->length - 1] == PATH_MARKER) {
     // Remove the trailing path marker
-    buffer[len - 1] = 0;
+    String_SubString(result, 0, -1);
   }
 
-  return NEW (String) (buffer);
+  return result;
 }
 
 String *STATIC (Combine)(const char *path, const char *file)
 {
-  char buffer[4096];
-
-  filepathcombine(path, file, buffer, sizeof(buffer));
-
-  return NEW (String) (buffer);
+  return BUFFERIZE(filepathcombine(path, file, sizeof(buffer), buffer));
 }
 
 #undef TYPENAME

@@ -43,6 +43,7 @@ int CONST (EndsWith)(const char *other);
 
 String *STATIC (Format)(const char *format, ...);
 String *STATIC (ToString)(void *object);
+String *STATIC (ToTypeString)(const Type *type, void *object);
 
 FOREIGN_VIRTUAL(ToString,    String_Copy);
 FOREIGN_VIRTUAL(KeyComparer, String_Cmp);

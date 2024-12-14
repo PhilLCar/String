@@ -27,7 +27,6 @@ const char *_formats[] = {
   "%%",   // %
   "%O",   // CUT Object
   "%Of",  // CUT Object (free)
-  "%OT",  // CUT Object (type specified)
 };
 
 /******************************************************************************/
@@ -60,31 +59,47 @@ int _format_match(const char *format)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-int _format_extract(const char *format, char whole[], char param[], char type[])
+int _format_extract(const char *format, char **whole, char **param, char **type)
 {
   if (*format != '%') return 0;
 
   for (const char *c = format + 1; *c; c++) {
-    int match = _format_match(c);
+    int match = 0;
+
+    if (*c == '[') {
+      // Reach the next closing bracket
+      while (*c && *c != ']') ++c;
+    } else if (*c == '(') {
+      // Reach the next closing parenthesis
+      while (*c && *c != ')') ++c;
+    } else {
+      match = _format_match(c);
+    }
 
     if (match) {
       int size = c - format + match;
 
       if (whole) {
-        memcpy(whole, format, size);
-        whole[size] = 0;
+        *whole = malloc(size + 1);
+
+        memcpy(*whole, format, size);
+        (*whole)[size] = 0;
       }
 
       if (param) {
         int psize =  c - format - 1;
 
-        memcpy(param, format + 1, psize);
-        param[psize] = 0;
+        *param = malloc(psize + 1);
+
+        memcpy(*param, format + 1, psize);
+        (*param)[psize] = 0;
       }
 
       if (type) {
-        memcpy(type, c, match);
-        type[match] = 0;
+        *type = malloc(match + 1);
+
+        memcpy(*type, c, match);
+        (*type)[match] = 0;
       }
 
       return size - 1;

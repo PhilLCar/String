@@ -297,34 +297,35 @@ String *_(justify)(const char *param)
 String *STATIC (format)(const char *format, va_list list)
 {
   String *buffer = NEW (String) ("");
-  
-  char fmtbuf[STRING_MAX_FORMAT_LENGTH];
-  char prmbuf[STRING_MAX_FORMAT_LENGTH];
-  char typbuf[STRING_MAX_FORMAT_LENGTH];
 
   for (int i = 0; format[i]; i++) {
     if (format[i] == '%') {
-      i += _format_extract(&format[i], fmtbuf, prmbuf, typbuf);
+      char *fmtbuf, *prmbuf, *typbuf;
+
+      i += _format_extract(&format[i], &fmtbuf, &prmbuf, &typbuf);
 
       if (typbuf[0] == 'O') {
-        if (typbuf[1] == 0) {
-          String_Concat(buffer, String_justify(String_ToString(va_arg(list, void*)), prmbuf));
-        } else if (typbuf[1] == 'f') {
-          void *object = va_arg(list, void*);
+        void   *object = va_arg(list, void*);
+        String *print  = NULL;
 
-          String_Concat(buffer, String_justify(String_ToString(object), prmbuf));
+        if (prmbuf[0] == '(' || prmbuf[0] == '[') {
+          char *jstbuf = IFNULL(strstr(prmbuf, ")"), strstr(prmbuf, "]"));
 
-          DELETE(object);
-        } else if (typbuf[1] == 'T') {
-          void       *object = va_arg(list, void*);
-          const Type *type   = va_arg(list, void*);
-          void       *tmp    = talloc(type);
+          *(jstbuf++) = 0;
 
-          memcpy(tmp, object, type->size);
-          String_Concat(buffer, String_justify(String_ToString(tmp), prmbuf));
-
-          tfree(tmp);
+          print = String_justify(prmbuf[0] == '('
+              ? String_ToTypeString(findtype(prmbuf), object)
+              : String_Format(prmbuf, object)
+            , jstbuf);
+        } else {
+          print = String_justify(String_ToString(object), prmbuf);
         }
+
+        if (typbuf[1] == 'f') {
+          DELETE(object);
+        }
+
+        String_Concat(buffer, print);
       } else {
         va_list  copy;
         String  *result = BUFFERIZE(({ va_copy(copy, list); vsnprintf(buffer, sizeof(buffer), fmtbuf, copy);}); va_end(copy))
@@ -334,6 +335,10 @@ String *STATIC (format)(const char *format, va_list list)
 
         String_Concat(buffer, result);
       }
+
+      free(fmtbuf);
+      free(prmbuf);
+      free(typbuf);
     } else {
       String_Append(buffer, format[i]);
     }
@@ -362,6 +367,26 @@ String *STATIC (ToString)(void *object)
 
   if (object) {
     const Type      *type     = gettype(object);
+    VirtualFunction  toString = virtual(type, "ToString");
+
+    if (toString) {
+      result = toString(object);
+    } else {
+      result = String_Format("{%s at %p}", type->name, object);
+    }
+  } else {
+    result = NEW (String) ("(null)");
+  }
+
+  return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *STATIC (ToTypeString)(const Type *type, void *object)
+{
+  String *result = NULL;
+
+  if (object) {
     VirtualFunction  toString = virtual(type, "ToString");
 
     if (toString) {

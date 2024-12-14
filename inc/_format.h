@@ -1,12 +1,13 @@
 #ifndef _FORMAT_H
 #define _FORMAT_H
 
+#include <diagnostic.h>
 #include <string.h>
+#include <stdlib.h>
 
 // For printing
 #define STRING_INIT_BUFFER_LENGTH   1 << 10
 #define STRING_MAX_BUFFER_LENGTH    1 << 20
-#define STRING_MAX_FORMAT_LENGTH    64
 
 #define BUFFERIZE(ACTION) ({\
   String *result = NULL;\
@@ -35,6 +36,6 @@
 // param: "-32"
 // type:  "O"
 // returns 5, which is equivalent to strlen(whole)
-int _format_extract(const char *format, char whole[], char param[], char type[]);
+int _format_extract(const char *format, char **whole, char **param, char **type);
 
 #endif

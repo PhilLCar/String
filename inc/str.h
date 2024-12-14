@@ -42,9 +42,8 @@ int CONST (StartsWith)(const char *other);
 int CONST (EndsWith)(const char *other);
 
 String *STATIC (Format)(const char *format, ...);
-String *STATIC (ToString)(const void *object);
-String *STATIC (ToTypeString)(const void *object, const Type *type);
-String *STATIC (ToFormatString)(const void *object, const char *format);
+String *STATIC (ToString)(const void *object, const Type *type);
+String *STATIC (ToFormatString)(const void *object, const Type *type, const char *format);
 
 FOREIGN_VIRTUAL(ToString,    String_Copy);
 FOREIGN_VIRTUAL(KeyComparer, String_Cmp);

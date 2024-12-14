@@ -67,11 +67,9 @@ int _format_extract(const char *format, char **whole, char **param, char **type)
     int match = 0;
 
     if (*c == '[') {
-      // Reach the next closing bracket
-      while (*c && *c != ']') ++c;
+      c = strrchr(format, ']');
     } else if (*c == '(') {
-      // Reach the next closing parenthesis
-      while (*c && *c != ')') ++c;
+      c = strrchr(format, ')');
     } else {
       match = _format_match(c);
     }

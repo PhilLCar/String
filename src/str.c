@@ -309,16 +309,21 @@ String *STATIC (format)(const char *format, va_list list)
         String *print  = NULL;
 
         if (prmbuf[0] == '(' || prmbuf[0] == '[') {
-          char *jstbuf = IFNULL(strstr(prmbuf, ")"), strstr(prmbuf, "]"));
+          char *type    = strchr(prmbuf, '(');
+          char *format  = strchr(prmbuf, '[');
+          char *justify = IFNULL(strrchr(prmbuf, ']'), strrchr(prmbuf, ')'));
 
-          *(jstbuf++) = 0;
+          // type must always come before (or it means it's for another format)
+          if (type > format)    type        = NULL;
+          if (type)           *(type++)     = 0;
+          if (type && format) *(format - 1) = 0;
+          if (format)         *(format++)   = 0;
+          
+          *(justify++) = 0;
 
-          print = String_justify(prmbuf[0] == '('
-              ? String_ToTypeString(object, findtype(prmbuf))
-              : String_ToFormatString(object, prmbuf)
-            , jstbuf);
+          print = String_justify(String_ToFormatString(object, type ? findtype(type) : NULL, format), justify);
         } else {
-          print = String_justify(String_ToString(object), prmbuf);
+          print = String_justify(String_ToString(object, NULL), prmbuf);
         }
 
         if (typbuf[1] == 'f') {
@@ -361,12 +366,13 @@ String *STATIC (Format)(const char *format, ...)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToString)(const void *object)
+String *STATIC (ToString)(const void *object, const Type *type)
 {
   String *result = NULL;
 
   if (object) {
-    const Type           *type     = gettype(object);
+    type = IFNULL(type, gettype(object));
+
     ConstVirtualFunction  toString = constvirtual(type, "ToString");
 
     if (toString) {
@@ -382,32 +388,13 @@ String *STATIC (ToString)(const void *object)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToTypeString)(const void *object, const Type *type)
+String *STATIC (ToFormatString)(const void *object, const Type *type, const char *format)
 {
   String *result = NULL;
 
   if (object) {
-    ConstVirtualFunction toString = constvirtual(type, "ToString");
+    type = IFNULL(type, gettype(object));
 
-    if (toString) {
-      result = toString(object);
-    } else {
-      result = String_Format("{%s at %p}", type->name, object);
-    }
-  } else {
-    result = NEW (String) ("(null)");
-  }
-
-  return result;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToFormatString)(const void *object, const char *format)
-{
-  String *result = NULL;
-
-  if (object) {
-    const Type           *type     = gettype(object);
     ConstVirtualFunction  toString = constvirtual(type, "ToString");
 
     if (toString) {

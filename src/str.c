@@ -314,8 +314,8 @@ String *STATIC (format)(const char *format, va_list list)
           *(jstbuf++) = 0;
 
           print = String_justify(prmbuf[0] == '('
-              ? String_ToTypeString(findtype(prmbuf), object)
-              : String_Format(prmbuf, object)
+              ? String_ToTypeString(object, findtype(prmbuf))
+              : String_ToFormatString(object, prmbuf)
             , jstbuf);
         } else {
           print = String_justify(String_ToString(object), prmbuf);
@@ -361,13 +361,13 @@ String *STATIC (Format)(const char *format, ...)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToString)(void *object)
+String *STATIC (ToString)(const void *object)
 {
   String *result = NULL;
 
   if (object) {
-    const Type      *type     = gettype(object);
-    VirtualFunction  toString = virtual(type, "ToString");
+    const Type           *type     = gettype(object);
+    ConstVirtualFunction  toString = constvirtual(type, "ToString");
 
     if (toString) {
       result = toString(object);
@@ -382,15 +382,36 @@ String *STATIC (ToString)(void *object)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToTypeString)(const Type *type, void *object)
+String *STATIC (ToTypeString)(const void *object, const Type *type)
 {
   String *result = NULL;
 
   if (object) {
-    VirtualFunction  toString = virtual(type, "ToString");
+    ConstVirtualFunction toString = constvirtual(type, "ToString");
 
     if (toString) {
       result = toString(object);
+    } else {
+      result = String_Format("{%s at %p}", type->name, object);
+    }
+  } else {
+    result = NEW (String) ("(null)");
+  }
+
+  return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *STATIC (ToFormatString)(const void *object, const char *format)
+{
+  String *result = NULL;
+
+  if (object) {
+    const Type           *type     = gettype(object);
+    ConstVirtualFunction  toString = constvirtual(type, "ToString");
+
+    if (toString) {
+      result = toString(object, format);
     } else {
       result = String_Format("{%s at %p}", type->name, object);
     }

@@ -311,7 +311,7 @@ String *STATIC (format)(const char *format, va_list list)
         if (prmbuf[0] == '(' || prmbuf[0] == '[') {
           char *type    = strchr(prmbuf, '(');
           char *format  = strchr(prmbuf, '[');
-          char *justify = IFNULL(strrchr(prmbuf, ']'), strrchr(prmbuf, ')'));
+          char *justify = IFNULL(strrchr(prmbuf, ']'), strchr(prmbuf, ')'));
 
           // type must always come before (or it means it's for another format)
           if (type > format)    type        = NULL;

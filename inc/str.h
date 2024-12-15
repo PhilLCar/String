@@ -16,7 +16,7 @@
 // A string of characters, with length
 #define TYPENAME String
 
-OBJECT (const char*) BASED (char*)
+OBJECT (const char*) INHERIT (char*)
   int   length;
 END_OBJECT("");
 
@@ -42,8 +42,9 @@ int CONST (StartsWith)(const char *other);
 int CONST (EndsWith)(const char *other);
 
 String *STATIC (Format)(const char *format, ...);
-String *STATIC (ToString)(const void *object, const Type *type);
-String *STATIC (ToFormatString)(const void *object, const Type *type, const char *format);
+String *STATIC (ToString)(const void *object);
+String *STATIC (ToStringType)(const void *object, const Type *type);
+String *STATIC (ToStringFormat)(const void *object, const Type *type, const char *format);
 
 FOREIGN_VIRTUAL(ToString,    String_Copy);
 FOREIGN_VIRTUAL(KeyComparer, String_Cmp);

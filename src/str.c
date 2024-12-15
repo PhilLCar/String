@@ -321,9 +321,9 @@ String *STATIC (format)(const char *format, va_list list)
           
           *(justify++) = 0;
 
-          print = String_justify(String_ToFormatString(object, type ? findtype(type) : NULL, format), justify);
+          print = String_justify(String_ToStringFormat(object, type ? findtype(type) : gettype(object), format), justify);
         } else {
-          print = String_justify(String_ToString(object, NULL), prmbuf);
+          print = String_justify(String_ToString(object), prmbuf);
         }
 
         if (typbuf[1] == 'f') {
@@ -366,41 +366,78 @@ String *STATIC (Format)(const char *format, ...)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToString)(const void *object, const Type *type)
+String *STATIC (ToString)(const void *object)
 {
-  String *result = NULL;
-
-  if (object) {
-    type = IFNULL(type, gettype(object));
-
-    ConstVirtualFunction  toString = constvirtual(type, "ToString");
-
-    if (toString) {
-      result = toString(object);
-    } else {
-      result = String_Format("{%s at %p}", type->name, object);
-    }
-  } else {
-    result = NEW (String) ("(null)");
-  }
-
-  return result;
+  return String_ToStringFormat(object, object ? gettype(object) : NULL, NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-String *STATIC (ToFormatString)(const void *object, const Type *type, const char *format)
+String *STATIC (ToStringType)(const void *object, const Type *type)
+{
+  return String_ToStringFormat(object, type, NULL);
+}
+
+/******************************************************************************/
+String *STATIC (ToStringFormat)(const void *object, const Type *type, const char *format)
 {
   String *result = NULL;
 
   if (object) {
-    type = IFNULL(type, gettype(object));
+    switch (type->category) {
+    case TYPES_DECIMAL:
+      if (!strcmp(type->name, "float")) {
+        result = String_Format("%g", *(float*)object);
+      } else if (!strcmp(type->name, "longdouble")) {
+        result = String_Format("%g", *(long double*)object);
+      } else {
+        // Default to double
+        result = String_Format("%g", *(double*)object);
+      }      
+      break;
+    case TYPES_POINTER:
+      result = String_Format("%p", object);
+      break;
+    case TYPES_OBJECT:
+      {
+        if (format && format[0]) {
+          ConstVirtualFunction toStringFormat = constvirtual(type, "ToStringFormat");
 
-    ConstVirtualFunction  toString = constvirtual(type, "ToString");
+          if (toStringFormat) {
+            result = toStringFormat(object, format);
+          }
+        } else {
+          ConstVirtualFunction toString = constvirtual(type, "ToString");
 
-    if (toString) {
-      result = toString(object, format);
-    } else {
-      result = String_Format("{%s at %p}", type->name, object);
+          if (toString) {
+            result = toString(object);
+          }
+        }
+
+        result = IFNULL(result, String_Format("{%s at %p}", type->name, object));
+      }
+      break;
+    case TYPES_DEFAULT:
+    default:
+      {
+        // TODO: We could add an unsigned category eventually
+        switch (type->size) {
+          case 1:
+            result = String_Format("%c", *(char*)object);
+            break;
+          case 2:
+            result = String_Format("%d", *(short*)object);
+            break;
+          case 8:
+            result = String_Format("%ld", *(long*)object);
+            break;
+          // Default to int
+          case 4:
+          default:
+            result = String_Format("%d", *(int*)object);
+            break;
+        }
+      }
+      break;
     }
   } else {
     result = NEW (String) ("(null)");
@@ -408,5 +445,6 @@ String *STATIC (ToFormatString)(const void *object, const Type *type, const char
 
   return result;
 }
+
 
 #undef TYPENAME

@@ -384,11 +384,11 @@ String *STATIC (ToStringFormat)(const void *object, const Type *type, const char
 
   if (object) {
     switch (type->category) {
-    case TYPES_DECIMAL:
+    case TYPES_FLOAT:
       if (!strcmp(type->name, "float")) {
         result = String_Format("%g", *(float*)object);
-      } else if (!strcmp(type->name, "longdouble")) {
-        result = String_Format("%g", *(long double*)object);
+      } else if (!strcmp(type->name, "__float128")) {
+        result = String_Format("%g", *(__float128*)object);
       } else {
         // Default to double
         result = String_Format("%g", *(double*)object);
@@ -416,10 +416,8 @@ String *STATIC (ToStringFormat)(const void *object, const Type *type, const char
         result = IFNULL(result, String_Format("{%s at %p}", type->name, object));
       }
       break;
-    case TYPES_DEFAULT:
-    default:
+    case TYPES_SIGNED:
       {
-        // TODO: We could add an unsigned category eventually
         switch (type->size) {
           case 1:
             result = String_Format("%c", *(char*)object);
@@ -438,6 +436,28 @@ String *STATIC (ToStringFormat)(const void *object, const Type *type, const char
         }
       }
       break;
+    case TYPES_UNSIGNED:
+      {
+        switch (type->size) {
+          case 1:
+            result = String_Format("%u", *(unsigned char*)object);
+            break;
+          case 2:
+            result = String_Format("%u", *(unsigned short*)object);
+            break;
+          case 8:
+            result = String_Format("%lu", *(long*)object);
+            break;
+          // Default to uint
+          case 4:
+          default:
+            result = String_Format("%u", *(unsigned int*)object);
+            break;
+        }
+      }
+      break;
+    default:
+      THROW (NEW (Exception) ("Displaying this type is not implemented yet!"));
     }
   } else {
     result = NEW (String) ("(null)");

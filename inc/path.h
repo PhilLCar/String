@@ -5,6 +5,7 @@
 #define STRING_FILE_H
 
 // CUT
+#include <diagnostic.h>
 #include <str.h>
 #include <file.h>
 

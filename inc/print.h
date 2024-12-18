@@ -1,6 +1,7 @@
 #ifndef PRINT_H
 #define PRINT_H
 
+#include <diagnostic.h>
 #include <str.h>
 
 void fprints(FILE *stream, String *string);

@@ -21,7 +21,6 @@ STRING_EXPORT String *STATIC (Extension)(const char *path);
 STRING_EXPORT String *STATIC (Folder)(const char *path);
 STRING_EXPORT String *STATIC (Combine)(const char *path, const char *file);
 
-
 #undef TYPENAME
 #endif
 

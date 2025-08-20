@@ -387,8 +387,10 @@ String *STATIC (ToStringFormat)(const void *object, const Type *type, const char
     case TYPES_FLOAT:
       if (!strcmp(type->name, "float")) {
         result = String_Format("%g", *(float*)object);
+#ifndef WIN
       } else if (!strcmp(type->name, "__float128")) {
         result = String_Format("%g", *(__float128*)object);
+#endif
       } else {
         // Default to double
         result = String_Format("%g", *(double*)object);

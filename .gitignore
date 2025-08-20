@@ -2,6 +2,8 @@
 obj
 lib
 bin
+win/packages
+**/.vs
 
 # Dev folders
 .vscode

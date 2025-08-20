@@ -4,12 +4,14 @@
 #include <diagnostic.h>
 #include <str.h>
 
-void fprints(FILE *stream, String *string);
-void sprints(char buffer[], String *string);
-void prints(String *string);
+#include "string.export.h"
 
-void fprint(FILE *stream, const char *format, ...);
-void sprint(char buffer[], const char *format, ...);
-void print(const char *format, ...);
+STRING_EXPORT void fprints(FILE *stream, String *string);
+STRING_EXPORT void sprints(char buffer[], String *string);
+STRING_EXPORT void prints(String *string);
+
+STRING_EXPORT void fprint(FILE *stream, const char *format, ...);
+STRING_EXPORT void sprint(char buffer[], const char *format, ...);
+STRING_EXPORT void print(const char *format, ...);
 
 #endif

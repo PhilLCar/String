@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>String</id>
+	<version> 2025.8.19.2231 </version>
+    <authors>Philippe Caron</authors>
+    <description>String Package provides Object Oriented Programming macros for C</description>
+	<readme>docs\README.md</readme>
+  
+	<dependencies>
+	  <group targetFramework="native">
+	  </group>
+	</dependencies>
+  </metadata>
+  
+  <files>
+    <file src="..\bin\x64\Release\String.dll" target="lib\native\String.dll" />
+    <file src="..\bin\x64\Release\String.lib" target="lib\native\String.lib" />
+    <file src="..\bin\x64\Release\String.pdb" target="lib\native\String.pdb" />
+    <file src="..\win\String.targets"         target="build\native\String.targets" />
+    <file src="..\win\String.props"           target="build\native\String.props" />
+    <file src="..\README.md"               target="docs\README.md" />
+  </files>
+</package>
+

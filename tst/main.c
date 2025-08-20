@@ -11,7 +11,7 @@ int main(void)
   printf("Je dis: %8s %d %E\n", "Allo!", 1, .45);
   print("Je dis: %+8Of %d %E\n", ok, 1, .45);
 
-  printf("Yé!\n");
+  printf("Yeah!\n");
 
   CHECK_MEMORY
 

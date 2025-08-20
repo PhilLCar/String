@@ -1,4 +1,4 @@
-#include <path.h>
+#include <string.path.h>
 
 #ifdef STRING_FILE_H
 
@@ -6,22 +6,22 @@
 
 String *STATIC (File)(const char *path)
 {
-  return BUFFERIZE(filenamewopath(path, sizeof(buffer), buffer));
+  return BUFFERIZE(fnamext(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (FileName)(const char *path)
 {
-  return BUFFERIZE(filenamewoext(path, sizeof(buffer), buffer));
+  return BUFFERIZE(fname(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (Extension)(const char *path)
 {
-  return BUFFERIZE(fileext(path, sizeof(buffer), buffer));
+  return BUFFERIZE(fext(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (Folder)(const char *path)
 {
-  String *result = BUFFERIZE(filepath(path, sizeof(buffer), buffer));
+  String *result = BUFFERIZE(fpath(path, sizeof(buffer), buffer));
 
   while (result && result->length > 1 && result->base[result->length - 1] == PATH_MARKER) {
     // Remove the trailing path marker
@@ -33,7 +33,7 @@ String *STATIC (Folder)(const char *path)
 
 String *STATIC (Combine)(const char *path, const char *file)
 {
-  return BUFFERIZE(filepathcombine(path, file, sizeof(buffer), buffer));
+  return BUFFERIZE(pcombine(path, file, sizeof(buffer), buffer));
 }
 
 #undef TYPENAME

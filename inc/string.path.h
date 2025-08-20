@@ -1,4 +1,4 @@
-#if defined(FILE_H) || defined(STRING) || 1
+#if (defined(FILE_H) && defined(PATH_H)) || defined(STRING_EXPORTS) || 1 
 // TODO: remove 1
 
 #ifndef STRING_PATH_H

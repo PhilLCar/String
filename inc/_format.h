@@ -6,29 +6,18 @@
 #include <stdlib.h>
 
 // For printing
-#define STRING_INIT_BUFFER_LENGTH   1 << 10
-#define STRING_MAX_BUFFER_LENGTH    1 << 20
+#define STRING_BUFFERIZE_BUFFER_LENGTH 1 << 10
 
-#define BUFFERIZE(ACTION) ({\
-  String *result = NULL;\
+#define BUFFERIZE(ACTION) ({ \
+  char buffer[STRING_BUFFERIZE_BUFFER_LENGTH]; \
+  int  length = ACTION; \
   \
-  for (int i = STRING_INIT_BUFFER_LENGTH; ; i <<= 1) {\
-    if (i >= STRING_MAX_BUFFER_LENGTH) {\
-      THROW (NEW (Exception) ("Buffer overflow!"));\
-      break;\
-    } else {\
-      char buffer[i];\
-      int  len = ACTION;\
+  if (length >= STRING_BUFFERIZE_BUFFER_LENGTH) { \
+    THROW (NEW (Exception) ("Buffer overflow!")); \
+  } \
   \
-      if (len < sizeof(buffer)) {\
-        result = NEW (String) (buffer);\
-        break;\
-      }\
-    }\
-  }\
-  \
-  result;\
-});
+  NEW (String) (buffer); \
+})
 
 // Returns the format string at the specified pointer, for instance:
 // Let's say format is "%-32O something"

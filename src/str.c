@@ -332,13 +332,14 @@ String *STATIC (format)(const char *format, va_list list)
 
         String_Concat(buffer, print);
       } else {
-        va_list  copy;
-        String  *result = BUFFERIZE(({ va_copy(copy, list); vsnprintf(buffer, sizeof(buffer), fmtbuf, copy);}); va_end(copy))
-
-        // Advance the real list (not the copy)
-        vsnprintf(NULL, 0, fmtbuf, list);
-
-        String_Concat(buffer, result);
+#ifdef WIN
+        // Take the whole register
+        void   *data  = va_arg(list, void*);
+        String *value = BUFFERIZE(sprintf(buffer, fmtbuf, data));
+#else
+        String *value = BUFFERIZE(vsnprintf(buffer, sizeof(buffer), fmtbuf, list));
+#endif
+        String_Concat(buffer, value);
       }
 
       free(fmtbuf);
@@ -467,6 +468,5 @@ String *STATIC (ToStringFormat)(const void *object, const Type *type, const char
 
   return result;
 }
-
 
 #undef TYPENAME

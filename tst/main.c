@@ -3,6 +3,8 @@
 #include <str.h>
 #include <print.h>
 
+//__declspec(allocate("virtual$1")) const VirtualTable vt = {};
+
 int main(void)
 {
   String *ok = NEW (String) ("Allo!");

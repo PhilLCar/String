@@ -1,6 +1,6 @@
 #include <string.path.h>
 
-#ifdef STRING_FILE_H
+#ifdef STRING_PATH_H
 
 #define TYPENAME Path
 

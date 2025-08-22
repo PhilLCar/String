@@ -15,7 +15,7 @@
 #include "string.export.h"
 
 // A string of characters, with length
-#define LIBEXPORT STRING_EXPORT
+#define LIB_EXPORT STRING_EXPORT
 #define TYPENAME String
 
 OBJECT (const char*) INHERIT (char*)
@@ -53,5 +53,5 @@ FOREIGN_VIRTUAL(KeyComparer, String_Cmp);
 FOREIGN_VIRTUAL(Comparer,    String_Compare);
 
 #undef TYPENAME
-#undef LIBEXPORT
+#undef LIB_EXPORT
 #endif

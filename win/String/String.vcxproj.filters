@@ -53,7 +53,19 @@
     <ClInclude Include="..\..\inc\_format.h">
       <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\inc\*.h">
+    <ClInclude Include="..\..\inc\print.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\str.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\string.export.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\string.path.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\_format.h">
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\_format.h">
@@ -88,9 +100,6 @@
     <ClCompile Include="..\..\src\_format.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\file_path.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\print.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -112,7 +121,16 @@
     <ClCompile Include="..\..\src\_format.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\*.c">
+    <ClCompile Include="..\..\src\print.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\str.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\string.path.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\_format.c">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\_format.c">

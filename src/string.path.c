@@ -6,22 +6,22 @@
 
 String *STATIC (File)(const char *path)
 {
-  return BUFFERIZE(fnamext(path, sizeof(buffer), buffer));
+  return BUFFER(fnamext(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (FileName)(const char *path)
 {
-  return BUFFERIZE(fname(path, sizeof(buffer), buffer));
+  return BUFFER(fname(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (Extension)(const char *path)
 {
-  return BUFFERIZE(fext(path, sizeof(buffer), buffer));
+  return BUFFER(fext(path, sizeof(buffer), buffer));
 }
 
 String *STATIC (Folder)(const char *path)
 {
-  String *result = BUFFERIZE(fpath(path, sizeof(buffer), buffer));
+  String *result = BUFFER(fpath(path, sizeof(buffer), buffer));
 
   while (result && result->length > 1 && result->base[result->length - 1] == PATH_MARKER) {
     // Remove the trailing path marker
@@ -33,7 +33,7 @@ String *STATIC (Folder)(const char *path)
 
 String *STATIC (Combine)(const char *path, const char *file)
 {
-  return BUFFERIZE(pcombine(path, file, sizeof(buffer), buffer));
+  return BUFFER(pcombine(path, file, sizeof(buffer), buffer));
 }
 
 #undef TYPENAME

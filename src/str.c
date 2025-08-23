@@ -333,11 +333,11 @@ String *STATIC (format)(const char *format, va_list list)
         String_Concat(buffer, print);
       } else {
 #ifdef WIN
-        // Take the whole register
+        // In windows, variadic args are promoted to register size; take the whole register
         void   *data  = va_arg(list, void*);
-        String *value = BUFFERIZE(sprintf(buffer, fmtbuf, data));
+        String *value = BUFFER(sprintf(buffer, fmtbuf, data));
 #else
-        String *value = BUFFERIZE(vsnprintf(buffer, sizeof(buffer), fmtbuf, list));
+        String *value = BUFFER(vsnprintf(buffer, sizeof(buffer), fmtbuf, list));
 #endif
         String_Concat(buffer, value);
       }

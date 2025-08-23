@@ -6,13 +6,13 @@
 #include <stdlib.h>
 
 // For printing
-#define STRING_BUFFERIZE_BUFFER_LENGTH 1 << 10
+#define STRING_BUFFER_LENGTH 1 << 10
 
-#define BUFFERIZE(ACTION) ({ \
-  char buffer[STRING_BUFFERIZE_BUFFER_LENGTH]; \
+#define BUFFER(ACTION) ({ \
+  char buffer[STRING_BUFFER_LENGTH]; \
   int  length = ACTION; \
   \
-  if (length >= STRING_BUFFERIZE_BUFFER_LENGTH) { \
+  if (length >= STRING_BUFFER_LENGTH) { \
     THROW (NEW (Exception) ("Buffer overflow!")); \
   } \
   \

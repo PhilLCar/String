@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>String</id>
-	<version> 2025.8.23.1526 </version>
+	<version> 2025.8.23.1527 </version>
     <authors>Philippe Caron</authors>
     <description>String Package provides Object Oriented Programming macros for C</description>
 	<readme>docs\README.md</readme>

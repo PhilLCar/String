@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>String</id>
-	<version> 2025.8.24.1308 </version>
+	<version> 2025.8.24.1332 </version>
     <authors>Philippe Caron</authors>
     <description>String Package provides Object Oriented Programming macros for C</description>
 	<readme>docs\README.md</readme>
@@ -17,9 +17,10 @@
     <file src="..\bin\x64\Release\String.dll" target="lib\native\String.dll" />
     <file src="..\bin\x64\Release\String.lib" target="lib\native\String.lib" />
     <file src="..\bin\x64\Release\String.pdb" target="lib\native\String.pdb" />
+    <file src="..\inc\*.h"                    target="build\native\include\" />
     <file src="..\win\String.targets"         target="build\native\String.targets" />
     <file src="..\win\String.props"           target="build\native\String.props" />
-    <file src="..\README.md"               target="docs\README.md" />
+    <file src="..\README.md"                  target="docs\README.md" />
   </files>
 </package>
 
